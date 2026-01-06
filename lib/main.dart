@@ -14,17 +14,22 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  late TabController tabController = TabController(length: 2, vsync: this);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        shadowColor: Colors.black,
         backgroundColor: Colors.white,
-        elevation: 1,
         title: Row(
           children: [Text("faishalfhid"), Icon(Icons.arrow_drop_down)],
         ),
@@ -36,7 +41,6 @@ class HomePage extends StatelessWidget {
       body: Column(
         children: [
           Container(
-            height: 350,
             padding: EdgeInsets.all(20),
             color: Colors.white,
             child: Column(
@@ -85,6 +89,7 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
+                SizedBox(height: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -125,10 +130,41 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-
-          Container(height: 400, color: Colors.amber),
+          TabBar(
+            controller: tabController,
+            indicatorColor: Colors.black,
+            tabs: [
+              Tab(icon: Icon(Icons.camera_alt, color: Colors.black)),
+              Tab(icon: Icon(Icons.tag_outlined, color: Colors.black)),
+            ],
+          ),
+          Expanded(
+            child: Container(
+              color: Colors.white,
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  mainAxisSpacing: 3,
+                  crossAxisSpacing: 3,
+                  crossAxisCount: 3,
+                ),
+                itemBuilder: (context, index) => Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                        "https://picsum.photos/id/${777 + index}/200/300",
+                      ),
+                    ),
+                  ),
+                ),
+                itemCount: 20,
+              ),
+            ),
+          ),
         ],
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         showSelectedLabels: false,
